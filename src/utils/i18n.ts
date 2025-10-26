@@ -2,11 +2,19 @@ import i18n from 'i18next';
 import Backend from 'i18next-fs-backend';
 import path from 'path';
 
+// Get default language from environment variable or use Chinese as default
+const getDefaultLanguage = () => {
+  const envLanguage = process.env.DEFAULT_LANGUAGE || '';
+  const supportedLanguages = ['en', 'zh'];
+  return supportedLanguages.includes(envLanguage) ? envLanguage : 'zh';
+};
+
 // Initialize i18n for backend
 const initI18n = async () => {
+  const defaultLang = getDefaultLanguage();
   return i18n.use(Backend).init({
-    lng: 'en', // default language
-    fallbackLng: 'en',
+    lng: defaultLang, // default language from env or zh
+    fallbackLng: defaultLang,
 
     backend: {
       // Path to translation files

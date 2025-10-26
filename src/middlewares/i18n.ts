@@ -9,9 +9,16 @@ export const i18nMiddleware = (req: Request, res: Response, next: NextFunction) 
   const acceptLanguage = req.headers['accept-language'];
   const customLanguageHeader = req.headers['x-language'] as string;
   const languageFromQuery = req.query.lang as string;
+  
+  // Get default language from environment variable or use Chinese as default
+  const getDefaultLanguage = () => {
+    const envLanguage = process.env.DEFAULT_LANGUAGE || '';
+    const supportedLanguages = ['en', 'zh'];
+    return supportedLanguages.includes(envLanguage) ? envLanguage : 'zh';
+  };
 
-  // Default to English
-  let detectedLanguage = 'en';
+  // Default language from env or Chinese
+  let detectedLanguage = getDefaultLanguage();
 
   // Priority order: query parameter > custom header > accept-language header
   if (languageFromQuery) {

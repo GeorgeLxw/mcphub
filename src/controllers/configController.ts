@@ -5,6 +5,13 @@ import { getDataService } from '../services/services.js';
 import { DataService } from '../services/dataService.js';
 import { IUser } from '../types/index.js';
 
+// Get default language from environment variable
+const getDefaultLanguage = (): string => {
+  const envLanguage = process.env.DEFAULT_LANGUAGE || '';
+  const supportedLanguages = ['en', 'zh'];
+  return supportedLanguages.includes(envLanguage) ? envLanguage : 'zh';
+};
+
 const dataService: DataService = getDataService();
 
 /**
@@ -16,6 +23,7 @@ export const getRuntimeConfig = (req: Request, res: Response): void => {
       basePath: config.basePath,
       version: config.mcpHubVersion,
       name: config.mcpHubName,
+      defaultLanguage: getDefaultLanguage(),
     };
 
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');

@@ -7,6 +7,16 @@ import enTranslation from '../../locales/en.json';
 import zhTranslation from '../../locales/zh.json';
 import frTranslation from '../../locales/fr.json';
 
+// Get default language from environment or config
+const getDefaultLanguage = () => {
+  // First check if we have runtime config with language setting
+  if (window.__MCPHUB_CONFIG__?.defaultLanguage) {
+    return window.__MCPHUB_CONFIG__.defaultLanguage;
+  }
+  // Fallback to Chinese
+  return 'zh';
+};
+
 i18n
   // Detect user language
   .use(LanguageDetector)
@@ -25,7 +35,7 @@ i18n
         translation: frTranslation,
       },
     },
-    fallbackLng: 'en',
+    fallbackLng: getDefaultLanguage(),
     debug: process.env.NODE_ENV === 'development',
 
     // Common namespace used for all translations
